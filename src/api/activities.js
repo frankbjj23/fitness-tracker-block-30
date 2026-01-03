@@ -1,5 +1,16 @@
 const API = import.meta.env.VITE_API;
 
+export const getActivity = async (id) => {
+  try {
+    const response = await fetch(API + `/activities/${id}`);
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
+};
+
 /** Fetches an array of activities from the API. */
 export async function getActivities() {
   try {
