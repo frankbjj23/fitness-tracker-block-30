@@ -11,6 +11,28 @@ export const getActivity = async (id) => {
   }
 };
 
+export const getRoutine = async (id) => {
+  try {
+    const response = await fetch(API + `/routines/${id}`);
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
+};
+
+export const getRoutines = async () => {
+  try {
+    const response = await fetch(API + `/routines/`);
+    const result = await response.json();
+    return result;
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
+};
+
 /** Fetches an array of activities from the API. */
 export async function getActivities() {
   try {
@@ -66,3 +88,54 @@ export async function deleteActivity(token, id) {
     throw Error(result.message);
   }
 }
+
+export const deleteRoutine = async (id, token) => {
+  if (!token) {
+    throw Error(`You must be signed in to delete a routine.`);
+  }
+
+  const response = await fetch(API + `/routines/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message);
+  }
+};
+
+export const postRoutine = async (routine, token) => {
+  if (!token) {
+    throw Error(`You must be signed in to post a routine`);
+  }
+  const response = await fetch(API + `/routines`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(routine),
+  });
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message);
+  }
+};
+
+export const postSet = async (set, token) => {
+  if (!token) {
+    throw Error(`You must be signed in to add sets`);
+  }
+  const response = await fetch(API + `/sets`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(set),
+  });
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message);
+  }
+};
